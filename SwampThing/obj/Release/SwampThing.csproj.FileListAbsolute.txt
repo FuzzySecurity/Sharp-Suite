@@ -1,0 +1,13 @@
+C:\Users\b33f\Desktop\SpoofCmdLine\TheThing\bin\Release\TheThing.exe
+C:\Users\b33f\Desktop\SpoofCmdLine\TheThing\bin\Release\TheThing.pdb
+C:\Users\b33f\Desktop\SpoofCmdLine\TheThing\obj\Release\SwampThing.csproj.CoreCompileInputs.cache
+C:\Users\b33f\Desktop\SpoofCmdLine\TheThing\obj\Release\TheThing.exe
+C:\Users\b33f\Desktop\SpoofCmdLine\TheThing\obj\Release\TheThing.pdb
+C:\Users\b33f\Desktop\SpoofCmdLine\SwampThing\bin\Release\SwampThing.exe
+C:\Users\b33f\Desktop\SpoofCmdLine\SwampThing\bin\Release\SwampThing.pdb
+C:\Users\b33f\Desktop\SpoofCmdLine\SwampThing\obj\Release\SwampThing.exe
+C:\Users\b33f\Desktop\SpoofCmdLine\SwampThing\obj\Release\SwampThing.pdb
+C:\Users\b33f\Desktop\SpoofCmdLine\SwampThing\obj\Release\SwampThing.csproj.CoreCompileInputs.cache
+C:\Users\b33f\Desktop\SpoofCmdLine\SwampThing\bin\Release\CommandLine.dll
+C:\Users\b33f\Desktop\SpoofCmdLine\SwampThing\bin\Release\CommandLine.xml
+C:\Users\b33f\Desktop\SpoofCmdLine\SwampThing\obj\Release\SwampThing.csproj.CopyComplete

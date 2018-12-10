@@ -1,0 +1,5 @@
+C:\Users\b33f\Desktop\SpoofCmdLine\TheThing\bin\Release\TheThing.exe
+C:\Users\b33f\Desktop\SpoofCmdLine\TheThing\bin\Release\TheThing.pdb
+C:\Users\b33f\Desktop\SpoofCmdLine\TheThing\obj\Release\TheThing.csproj.CoreCompileInputs.cache
+C:\Users\b33f\Desktop\SpoofCmdLine\TheThing\obj\Release\TheThing.exe
+C:\Users\b33f\Desktop\SpoofCmdLine\TheThing\obj\Release\TheThing.pdb
