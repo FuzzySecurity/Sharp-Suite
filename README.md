@@ -46,4 +46,5 @@ C:\>SwampThing.exe -l C:\Windows\System32\notepad.exe -f C:\aaa.txt -r C:\bbb.tx
 [+] Local UNICODE_STRING          : 0xEBC4D0
 [+] Remote UNICODE_STRING.Buffer  : 0x20DA9B10000
 [+] pRTL_USER_PROCESS_PARAMETERS  : 0x20DA9870FE0
+[?] Success rewrote Len, MaxLen, Buffer..
 ```
