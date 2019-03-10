@@ -48,3 +48,49 @@ C:\>SwampThing.exe -l C:\Windows\System32\notepad.exe -f C:\aaa.txt -r C:\bbb.tx
 [+] pRTL_USER_PROCESS_PARAMETERS  : 0x20DA9870FE0
 [?] Success rewrote Len, MaxLen, Buffer..
 ```
+
+## Windows API
+
+### SystemProcessAndThreadsInformation
+
+While working on a side project I had to access out-of-process thread information, to do this I used NtQuerySystemInformation -> SystemProcessAndThreadInformation. As it may be helpful for reference I wrote a small wrapper round this function to list process and thread information for a specific PID. Note that I am not extracting all available information from SYSTEM_PROCESSES and SYSTEM_THREAD_INFORMATION, feel free to extend the output with a pull request.
+
+```
+C:\> SystemProcessAndThreadsInformation.exe -p 4508
+
+[+] Process Details
+    ImageName           : powershell.exe
+    ProcessId           : 4508
+    ParentPid           : 8256
+    HandleCount         : 701
+    ThreadCount         : 25
+    SessionId           : 1
+    Priority            : 8
+    CreateTime          : 0d:22h:0m:31s:876ms
+    UserTime            : 0d:0h:0m:0s:328ms
+    KernelTime          : 0d:0h:0m:0s:281ms
+    WorkingSetSize      : 73.52734375 MB
+    PeakWorkingSetSize  : 73.5859375 MB
+    PageFaultCount      : 26896
+
+[+] Thread Details
+[>] TID: 9832, Priority: 9
+    |-> StartAddress: 0x7FFB84833670
+    |-> Created: 0d:22h:0m:31s:876ms, uTime: 0d:0h:0m:0s:46ms, kTime: 0d:0h:0m:0s:93ms
+    |-> WaitTime: 5843708, WaitReason: UserRequest
+    |-> State: Wait, ContextSwitches: 232
+
+[>] TID: 5552, Priority: 8
+    |-> StartAddress: 0x7FFB84833670
+    |-> Created: 0d:22h:0m:31s:970ms, uTime: 0d:0h:0m:0s:15ms, kTime: 0d:0h:0m:0s:15ms
+    |-> WaitTime: 5843460, WaitReason: WrQueue
+    |-> State: Wait, ContextSwitches: 38
+
+[>] TID: 15716, Priority: 8
+    |-> StartAddress: 0x7FFB84833670
+    |-> Created: 0d:22h:0m:31s:970ms, uTime: 0d:0h:0m:0s:15ms, kTime: 0d:0h:0m:0s:0ms
+    |-> WaitTime: 5843460, WaitReason: WrQueue
+    |-> State: Wait, ContextSwitches: 30
+
+[...Snipped...]
+```
