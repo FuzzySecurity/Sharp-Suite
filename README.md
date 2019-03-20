@@ -51,7 +51,7 @@ C:\>SwampThing.exe -l C:\Windows\System32\notepad.exe -f C:\aaa.txt -r C:\bbb.tx
 
 ### DesertNut
 
-DesertNut is a proof-of-concept for code injection using subclassed window callbacks (more commonly known as PROPagate). The pertinent part here is that this does use any suspect thread creation API's, instead as implied it hijacks window callbacks. DesertNut includes two flags: "-l" to list all potential properties that could be hijacked and "-i" to inject shellcode into explorer and execute notepad. Note that this POC is only designed for x64 (tested on Win10 RS5 & Win7) since it requires custom shellcode with a specific callback function prototype. For further details please see [this post](http://www.hexacorn.com/blog/2017/10/26/propagate-a-new-code-injection-trick/) by Hexacorn and [this post](https://modexp.wordpress.com/2018/08/23/process-injection-propagate/) by modexp.
+DesertNut is a proof-of-concept for code injection using subclassed window callbacks (more commonly known as PROPagate). The pertinent part here is that this does not use any suspect thread creation API's, instead as implied it hijacks window callbacks. DesertNut includes two flags: "-l" to list all potential properties that could be hijacked and "-i" to inject shellcode into explorer and execute notepad. Note that this POC is only designed for x64 (tested on Win10 RS5 & Win7) since it requires custom shellcode with a specific callback function prototype. For further details please see [this post](http://www.hexacorn.com/blog/2017/10/26/propagate-a-new-code-injection-trick/) by Hexacorn and [this post](https://modexp.wordpress.com/2018/08/23/process-injection-propagate/) by modexp.
 
 ```
 C:\> DesertNut.exe -i
