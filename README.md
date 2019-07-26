@@ -217,6 +217,44 @@ C:\> WindfarmDynamite.exe -l 4132
     |-> Context: 0x0 => N/A
 ```
 
+### MaceTrap
+
+MaceTrap is a proof-of-concept for time stomping using SetFileTime. MaceTrap allows you to set the CreationTime / LastAccessTime / LastWriteTime for arbitrary files and folders. These elements can be changed individually, in bulk or can be duplicated from an existing file or folder. Time permitting I will update MaceTrap to include comprehensive PE compile time stomping as well (header, import table, export table, debug directory, resources and fixing up the checksum).
+
+```
+C:\> MaceTrap.exe
+
+    /-|-\   MACE
+   [++++||<<>><<>>|===|+
+    \-|-/    TRAP             ~b33f~
+
+
+ >--~~--> Args? <--~~--<
+
+-l (-List)        List FileTime information for a file or folder
+-s (-Set)         Set FileTime information for a file or folder
+-d (-Duplicate)   Duplicate FileTime information from a file or folder
+-t (Time)         String DateTime representation; requires quotes if it contains spaces. All
+                  undefined elements are set randomly (YYYY-MM-DD is required!):
+                    =>  1999-10-20
+                    => "2001-01-02 14:13"
+                    => "2019-02-19 01:01:01.111"
+-c (-Create)      Boolean flag, overwrite CreationTime
+-a (-Access)      Boolean flag, overwrite LastAccessTime
+-w (-Write)       Boolean flag, overwrite LastWriteTime
+
+ >--~~--> Usage? <--~~--<
+
+# List all FileTime elements
+MaceTrap.exe -l C:\Windows\System32\kernel32.dll
+# TimeStomp all FileTime elements
+MaceTrap.exe -s C:\Some\Target\file.folder -t "2019-02-19 01:01:01,111"
+# TimeStomp CreationTime & LastWriteTime; here HH:MM:SS,MS are randomized
+MaceTrap.exe -s C:\Some\Target\file.folder -t 1999-09-09 -c -w
+# TimeStomp a file/folder by duplicating the FileTime information from an existing file/folder
+MaceTrap.exe -s C:\Some\Target\file.folder -d C:\Windows\System32\kernel32.dll
+```
+
 ## Windows API
 
 ### SystemProcessAndThreadsInformation
