@@ -38,7 +38,7 @@ namespace MaceTrap
             ReturnStatusMessage("# List all FileTime elements", ConsoleColor.Green);
             Console.WriteLine("MaceTrap.exe -l C:\\Windows\\System32\\kernel32.dll");
             ReturnStatusMessage("# TimeStomp all FileTime elements", ConsoleColor.Green);
-            Console.WriteLine("MaceTrap.exe -s C:\\Some\\Target\\file.folder -t \"2019-02-19 01:01:01,111\"");
+            Console.WriteLine("MaceTrap.exe -s C:\\Some\\Target\\file.folder -t \"2019-02-19 01:01:01.111\"");
             ReturnStatusMessage("# TimeStomp CreationTime & LastWriteTime; here HH:MM:SS,MS are randomized", ConsoleColor.Green);
             Console.WriteLine("MaceTrap.exe -s C:\\Some\\Target\\file.folder -t 1999-09-09 -c -w");
             ReturnStatusMessage("# TimeStomp a file/folder by duplicating the FileTime information from an existing file/folder", ConsoleColor.Green);
