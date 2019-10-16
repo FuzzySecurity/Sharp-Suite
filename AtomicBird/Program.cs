@@ -107,10 +107,10 @@ namespace AtomicBird
         static void Main(string[] args)
         {
             // Hook MessageBoxA for demo purposes
-            //MsgBoxHookTest();
+            MsgBoxHookTest();
 
             // Hook NtQuerySystemInformation
-            NtQuerySystemInformationHook();
+            //NtQuerySystemInformationHook();
         }
     }
 }
