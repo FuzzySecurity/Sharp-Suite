@@ -303,6 +303,41 @@ C:\> UrbanBishop.exe -i 3380 -p C:\Users\b33f\Desktop\sc.bin -c
     |-> NtUnmapViewOfSection
 ```
 
+### AtomicBird
+
+AtmoicBird, is a crude POC to demo the use of [EasyHook](https://easyhook.github.io/) in .Net payloads combined with [Costura](https://github.com/Fody/Costura) to pack resources into a single module. AtomicBird has two functions, (1) Hook MessageBoxA => print to console / modify parameters => unhook and (2) Hook NtQuerySystemInformation->SystemProcessInformation, search the linked list of SYSTEM_PROCESS_INFORMATION Structs to find powershell processes and unlink them. The second function requires that you inject the .Net PE into a process that uses NtQuerySystemInformation (Process Explorer was used for testing), you can do that with execute-assembly or with donut by generating shellcode. AtmoicBird was only tested on x64 Win10.
+
+```
+
+              .---.        .-----------
+             /     \  __  /    ------
+            / /     \(  )/    -----  Atomic
+           //////   ' \/ `   ---       Bird
+          //// / // :    : ---
+         // /   /  /`    '--
+        //          //..\\      ~b33f~
+               ====UU====UU====
+                   '//||\\`
+                     ''``
+Called ==> SystemProcessInformation
+Called ==> SystemProcessInformation
+Called ==> SystemProcessInformation
+Called ==> SystemProcessInformation
+Called ==> SystemProcessInformation
+[!] Found Powershell => rewriting linked list
+Called ==> SystemProcessInformation
+[!] Found Powershell => rewriting linked list
+Called ==> SystemProcessInformation
+[!] Found Powershell => rewriting linked list
+Called ==> SystemProcessInformation
+[!] Found Powershell => rewriting linked list
+Called ==> SystemProcessInformation
+[!] Found Powershell => rewriting linked list
+[!] Found Powershell => rewriting linked list
+
+[...Snipped...]
+```
+
 ## Windows API
 
 ### SystemProcessAndThreadsInformation

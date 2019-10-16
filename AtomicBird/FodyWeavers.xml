@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Weavers>
+	<Costura>
+		<IncludeAssemblies>
+			EasyHook
+		</IncludeAssemblies>
+		<Unmanaged32Assemblies>
+			EasyHook32
+		</Unmanaged32Assemblies>
+		<Unmanaged64Assemblies>
+			EasyHook64
+		</Unmanaged64Assemblies>
+</Costura>
+</Weavers>
