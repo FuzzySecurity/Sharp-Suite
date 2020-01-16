@@ -344,6 +344,44 @@ RemoteViewing, is quick POC to demo RDP credential theft through API hooking usi
 
 ## Windows API
 
+### GetAPISetMapping
+
+This project parses the PEB to match Windows API Set DLL's to their host DLL. This code is adapted from [Lunar](https://github.com/Dewera/Lunar/) by [@fakedewera](https://twitter.com/fakedewera).
+
+```
+C:\> GetAPISetMapping.exe
+ >--~~--> Args? <--~~--<
+
+-List   (-l)       Boolean: List all know API Set mappings.
+-Search (-s)       String: Perform string match based on partial or full API Set name.
+
+ >--~~--> Usage? <--~~--<
+
+GetAPISetMapping.exe -l
+GetAPISetMapping.exe -s "api-ms-win-appmodel-state-l1-2-0.dll"
+
+C:\> GetAPISetMapping.exe -s "win-dx-d3dkmt"
+API Set: api-ms-win-dx-d3dkmt-l1-1-5.dll  -->  gdi32.dll
+API Set: ext-ms-win-dx-d3dkmt-dxcore-l1-1-0.dll  -->  dxcore.dll
+API Set: ext-ms-win-dx-d3dkmt-gdi-l1-1-0.dll  -->  gdi32.dll
+
+C:\> GetAPISetMapping.exe -l
+API Set: api-ms-onecoreuap-print-render-l1-1-0.dll  -->  printrenderapihost.dll
+API Set: api-ms-win-appmodel-identity-l1-2-0.dll  -->  kernel.appcore.dll
+API Set: api-ms-win-appmodel-runtime-internal-l1-1-6.dll  -->  kernel.appcore.dll
+API Set: api-ms-win-appmodel-runtime-l1-1-3.dll  -->  kernel.appcore.dll
+API Set: api-ms-win-appmodel-state-l1-1-2.dll  -->  kernel.appcore.dll
+API Set: api-ms-win-appmodel-state-l1-2-0.dll  -->  kernel.appcore.dll
+API Set: api-ms-win-appmodel-unlock-l1-1-0.dll  -->  kernel.appcore.dll
+API Set: api-ms-win-base-bootconfig-l1-1-0.dll  -->  advapi32.dll
+API Set: api-ms-win-base-util-l1-1-0.dll  -->  advapi32.dll
+API Set: api-ms-win-composition-redirection-l1-1-0.dll  -->  dwmredir.dll
+API Set: api-ms-win-composition-windowmanager-l1-1-0.dll  -->  udwm.dll
+API Set: api-ms-win-containers-cmclient-l1-1-1.dll  -->  cmclient.dll
+
+[...Snipped...]
+```
+
 ### SystemProcessAndThreadsInformation
 
 While working on a side project I had to access out-of-process thread information, to do this I used NtQuerySystemInformation -> SystemProcessAndThreadInformation. As it may be helpful for reference I wrote a small wrapper round this function to list process and thread information for a specific PID. Note that I am not extracting all available information from SYSTEM_PROCESSES and SYSTEM_THREAD_INFORMATION, feel free to extend the output with a pull request.
