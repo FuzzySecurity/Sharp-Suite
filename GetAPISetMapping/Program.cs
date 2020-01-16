@@ -89,10 +89,24 @@ namespace GetAPISetMapping
                     {
                         if (SearchResult == String.Empty)
                         {
-                            SearchResult += "API Set: " + mapping.Key + "  -->  " + mapping.Value;
+                            if (string.IsNullOrEmpty(mapping.Value))
+                            {
+                                SearchResult += "API Set: " + mapping.Key + "  -->  N/A";
+                            }
+                            else
+                            {
+                                SearchResult += "API Set: " + mapping.Key + "  -->  " + mapping.Value;
+                            }
                         } else
                         {
-                            SearchResult += "\nAPI Set: " + mapping.Key + "  -->  " + mapping.Value;
+                            if (string.IsNullOrEmpty(mapping.Value))
+                            {
+                                SearchResult += "\nAPI Set: " + mapping.Key + "  -->  N/A";
+                            }
+                            else
+                            {
+                                SearchResult += "\nAPI Set: " + mapping.Key + "  -->  " + mapping.Value;
+                            }
                         }
                     }
                 }
@@ -125,20 +139,20 @@ namespace GetAPISetMapping
             // Parse args
             if (CommandLineParser.Default.ParseArguments(args, ArgOptions))
             {
-               if (string.IsNullOrEmpty(ArgOptions.Search) && !ArgOptions.List)
-               {
-                    Helper.PrintHelp();
-               }
-               else
-               {
-                    if (ArgOptions.List)
-                    {
-                        GetAPISet(String.Empty, true);
-                    } else
-                    {
-                        GetAPISet(ArgOptions.Search, false);
-                    }
-               }
+                if (string.IsNullOrEmpty(ArgOptions.Search) && !ArgOptions.List)
+                {
+                     Helper.PrintHelp();
+                }
+                else
+                {
+                     if (ArgOptions.List)
+                     {
+                         GetAPISet(String.Empty, true);
+                     } else
+                     {
+                         GetAPISet(ArgOptions.Search, false);
+                     }
+                }
             }
             else
             {
