@@ -344,7 +344,7 @@ RemoteViewing, is quick POC to demo RDP credential theft through API hooking usi
 
 ### Londor
 
-Londor is a small toolkit which wraps [frida-clr](https://github.com/frida/frida). I initially wanted to create a tool which would allow you to generate DynamoRIO coverage files but I also ported some code from [Fermion](https://github.com/FuzzySecurity/Fermion) to provide some more generic JScript injection capabilities.
+Londor is a small toolkit which wraps [frida-clr](https://github.com/frida/frida). I initially wanted to create a tool which would allow you to generate DynamoRIO coverage files but I also ported some code from [Fermion](https://github.com/FuzzySecurity/Fermion) to provide some more generic JScript injection capabilities. Note: There are some color palette bugs in Londor that I left unfixed (not my problem & does not affect usability) so if you use it in different terminal flavors you will see some wacky color combos. I may return to this at some point when I have ∆-freeTime.
 
 ```
 C:\> Londor.exe
