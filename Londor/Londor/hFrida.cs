@@ -299,7 +299,10 @@ namespace Londor
 				FileWriteWrapper(String.Empty, BBTableArray, OutputPath);
 			}
 			Console.WriteLine("\n[+] Exit Reason: " + e.Reason, Color.Yellow);
-			Console.WriteLine("    |-> Wrote partial trace data to file..", Color.Yellow);
+			if (BBTableCount != 0)
+			{
+				Console.WriteLine("    |-> Wrote partial trace data to file..", Color.Yellow);
+			}
 			System.Windows.Threading.Dispatcher.ExitAllFrames();
 		}
 
