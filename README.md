@@ -342,6 +342,77 @@ Called ==> SystemProcessInformation
 
 RemoteViewing, is quick POC to demo RDP credential theft through API hooking using [EasyHook](https://easyhook.github.io/) for .Net payloads combined with [Costura](https://github.com/Fody/Costura) to pack resources into a single module. This is adapted from a post by [@0x09AL](https://twitter.com/0x09AL) that you can read [here](https://www.mdsec.co.uk/2019/11/rdpthief-extracting-clear-text-credentials-from-remote-desktop-clients/). To use this you have to compile RemoteViewing and then turn it into shellcode with [Donut](https://github.com/TheWover/donut) after which you have to inject that shellcode into mstsc. RemoteViewing will RC2 encrypt any credentials it captures and write them to disk. You can then use Clairvoyant to decrypt the file in memory, read out the results and delete the file.
 
+### Londor
+
+Londor is a small toolkit which wraps [frida-clr](https://github.com/frida/frida). I initially wanted to create a tool which would allow you to generate DynamoRIO coverage files but I also ported some code from [Fermion](https://github.com/FuzzySecurity/Fermion) to provide some more generic JScript injection capabilities.
+
+```
+C:\> Londor.exe
+    __              _
+   |  |   ___ ___ _| |___ ___
+   |  |__| . |   | . | . |  _|
+   |_____|___|_|_|___|___|_|
+
+                         ~b33f
+
+
+  >--~~--> Args? <--~~--<
+
+ --help   (-h)    Show this help message.
+ --type   (-t)    Instrumentation type: Coverage, Script.
+ --out    (-o)    Full output path for DRCOV file.
+ --path   (-p)    Full path to JS script.
+ --pid    (-pid)  PID of the process to attach to.
+ --name   (-n)    Substring name of process to attach to.
+ --start  (-s)    Full path to binary to launch.
+ --args   (-a)    Args to pass to binary.
+
+  >--~~--> Usage? <--~~--<
+
+
+ # Generate coverage information for a process
+ Londor.exe -t Coverage -pid 123 -o C:\Some\Out\Path.drcov
+ Londor.exe -t Coverage -n notepad -o C:\Some\Out\Path.drcov
+ Londor.exe -t Coverage -s C:\Some\Proc\bin.exe -a SomeOrNoArgs -o C:\Some\Out\Path.drcov
+
+ # Inject JS script into process
+ Londor.exe -t Script -pid 123 -p C:\Some\Path\To\Script.js
+ Londor.exe -t Script -n notepad -p C:\Some\Path\To\Script.js
+ Londor.exe -t Script -s C:\Some\Proc\bin.exe -a SomeOrNoArgs -p C:\Some\Path\To\Script.js
+ 
+
+C:\> Londor.exe -t Coverage -s "C:\Windows\System32\notepad.exe" -o C:\Users\b33f\Desktop\test.drcov -a "C:\Users\b33f\Desktop\bla.txt"
+    __              _
+   |  |   ___ ___ _| |___ ___
+   |  |__| . |   | . | . |  _|
+   |_____|___|_|_|___|___|_|
+
+                         ~b33f
+
+
+[>] Spawning process for coverage..
+    |-> PID: 5260; Path: C:\Windows\System32\notepad.exe
+    |-> Script loaded
+
+[*] Press ctrl-c to detach..
+
+[+] Block trace Length: 107160
+    |-> BBS slice: 13395; Total BBS: 13395
+[+] Block trace Length: 18456
+    |-> BBS slice: 2307; Total BBS: 15702
+[+] Block trace Length: 76032
+    |-> BBS slice: 9504; Total BBS: 25206
+[+] Block trace Length: 22216
+    |-> BBS slice: 2777; Total BBS: 27983
+[+] Block trace Length: 20248
+    |-> BBS slice: 2531; Total BBS: 30514
+[+] Block trace Length: 32
+    |-> BBS slice: 4; Total BBS: 30518
+
+[?] Unloading hooks, please wait..
+    |-> Wrote trace data to file
+```
+
 ## Windows API
 
 ### GetAPISetMapping
