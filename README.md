@@ -480,6 +480,29 @@ C:\> VirtToPhys.exe -u
 [?] Driver unload: OK
 ```
 
+### DiscerningFinch
+
+DiscerningFinch is ... discerning! FinchGen lets you create an encrypted templated which you can copy/paste into DiscerningFinch. At runtime DiscerningFinch collects an array of OS specific string constants and then attempts to use those to brute-force decrypt the inner binary. If it succeeds it loads the inner binary into memory passing along any command line arguments that may exists. If it fails, it prints out a .NET-looking error message as feedback. Take note that the .NET version of the inner binary should be the same as that of DiscerningFinch, compile accordingly.
+
+```
+C:\> FinchGen.exe -p C:\Some\Path\netApp.exe -k "NVIDIA Corporation" -o C:\Some\Path\keyed_template.cs
+
+...
+
+C:\> DiscerningFinch_badKey.exe 111 222 zzz
+System.IndexOutOfRangeException: Finch index was outside the bounds of the array
+    at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberInfo info)
+    at System.Number.ParseInt32(String s, NumberStyles style, NumberFormatInfo info)
+    at System.Int32.Parse(String s)
+
+C:\> DiscerningFinch_goodKey.exe 111 222 zzz
+[+] Hello There!
+[?] Got 3 cmdline args..
+    |_ 111
+    |_ 222
+    |_ zzz
+```
+
 ## Windows API
 
 ### GetAPISetMapping
