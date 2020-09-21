@@ -22,7 +22,7 @@ namespace DiscerningFinch
                         return;
                     }
                 }
-			}
+            }
             catch { }
             Console.WriteLine(@"System.IndexOutOfRangeException: Finch index was outside the bounds of the array
     at System.Number.StringToNumber(String str, NumberStyles options, NumberBuffer& number, NumberInfo info)
