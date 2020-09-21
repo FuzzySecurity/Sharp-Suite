@@ -482,7 +482,7 @@ C:\> VirtToPhys.exe -u
 
 ### DiscerningFinch
 
-DiscerningFinch is ... discerning! FinchGen lets you create an encrypted templated which you can copy/paste into DiscerningFinch. At runtime DiscerningFinch collects an array of OS specific string constants and then attempts to use those to brute-force decrypt the inner binary. If it succeeds it loads the inner binary into memory passing along any command line arguments that may exists. If it fails, it prints out a .NET-looking error message as feedback. Take note that the .NET version of the inner binary should be the same as that of DiscerningFinch, compile accordingly.
+DiscerningFinch is ... discerning! FinchGen lets you create an encrypted templated which you can copy/paste into DiscerningFinch. At runtime DiscerningFinch collects [an array of OS specific string constants](https://github.com/FuzzySecurity/Sharp-Suite/blob/master/DiscerningFinch/DiscerningFinch/DiscerningFinch/Helper.cs#L15) and then attempts to use those to brute-force decrypt the inner binary. If it succeeds it loads the inner binary into memory passing along any command line arguments that may exists. If it fails, it prints out a .NET-looking error message as feedback. Take note that the .NET version of the inner binary should be the same as that of DiscerningFinch, compile accordingly.
 
 ```
 C:\> FinchGen.exe -p C:\Some\Path\netApp.exe -k "NVIDIA Corporation" -o C:\Some\Path\keyed_template.cs
