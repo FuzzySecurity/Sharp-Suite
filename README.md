@@ -503,6 +503,32 @@ C:\> DiscerningFinch_goodKey.exe 111 222 zzz
     |_ zzz
 ```
 
+### Canary
+
+Canary is a small DIY extension to [SharpChrome](https://github.com/GhostPack/SharpDPAPI). It lets you pull browser history for Chrome or the new Chromium Edge. Results are orderd by visit_count and you can pull all data or use the "-l" flag to pull only the last X days. Most of the boilerplate is ripped out of SharpChrome and can be added there easily if someone wants to make a PR for that.
+
+```
+C:\> Canary.exe -h
+ __
+/   _ __  _  __ \/
+\__(_|| |(_| |  /
+
+  -h(--Help)       Show this help message.
+  -l(--Limit)      Limit results to the past x days.
+  -b(--Browser)    Chrome (default) or Edge (new chromium Edge).
+
+C:\> Canary.exe -b edge -l 3
+
+[...Snipped...]
+
+URL             : https://microsoftedgewelcome.microsoft.com/en-us/
+title           : Microsoft Edge
+visit_count     : 2
+last_visit_time : 22/09/2020 12:04:07
+
+[...Snipped...]
+```
+
 ## Windows API
 
 ### GetAPISetMapping
