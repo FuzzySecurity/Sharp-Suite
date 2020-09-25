@@ -612,3 +612,34 @@ C:\> SystemProcessAndThreadsInformation.exe -p 4508
 
 [...Snipped...]
 ```
+
+### GetNetworkInterfaces
+
+GetNetworkInterfaces is a small .Net45 utility to pull local network adapter information. It mostly has feature parity with "ipconfig /all" and can be useful for some fast enumeration.
+
+```
+C:\> GetNetworkInterfaces.exe
+
+[...Snipped...]
+
+VMware Virtual Ethernet Adapter for VMnet8
+  Name .................................... : VMware Network Adapter VMnet8
+  Interface type .......................... : Ethernet
+  Physical Address ........................ : 005056C00008
+  Operational status ...................... : Up
+  IP version .............................. : IPv4 IPv6
+  IPv6 .................................... : fe80::2101:9102:751a:fdd2%16
+  IPv4 .................................... : 192.168.199.1
+  Mask .................................... : 255.255.255.0
+  DHCP .................................... : True
+  DHCP Server ............................. : 192.168.199.254
+  DNS Server .............................. : fec0:0:0:ffff::1%1
+  DNS Server .............................. : fec0:0:0:ffff::2%1
+  DNS Server .............................. : fec0:0:0:ffff::3%1
+  Dynamic DNS ............................. : True
+  DNS suffix .............................. :
+  DNS enabled ............................. : False
+  Primary WINS Server ..................... : 192.168.199.2
+
+[...Snipped...]
+```
