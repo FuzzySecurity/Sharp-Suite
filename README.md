@@ -529,6 +529,12 @@ last_visit_time : 22/09/2020 12:04:07
 [...Snipped...]
 ```
 
+### Reprobate
+
+Reprobate consists of two `cs` files which contain all of the [DynamicInvoke](https://thewover.github.io/Dynamic-Invoke/) functionality and are meant to be plug-and-play for your C# projects. This can be preferable to using a nuget package or whole-sale including [SharpSploit](https://github.com/cobbr/SharpSploit). Eventually I will integrate bubble-sort Syscall ID identification as well to avoid manual ntdll mapping/enumeration.
+
+For further details check out => [BlueHatIL 2020: Staying # and Bringing Covert Injection Tradecraft to .NET](https://github.com/FuzzySecurity/BlueHatIL-2020)
+
 ## Windows API
 
 ### GetAPISetMapping
