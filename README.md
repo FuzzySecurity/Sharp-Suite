@@ -576,6 +576,61 @@ C:\> Melkor.exe
 [?] Press enter to exit..
 ```
 
+### PickmansModel
+
+`PickmansModel` is a small POC which demonstrates robust encryption negotiation using Elliptic-Curve Diffie–Hellman (ECDH) key exchange. In this instance the exchange is negotiated over a named pipe (server & client), it also supports traffic across hosts. The transport itself is incidental, you can rip the code out and put it in some other protocol if you like. I mostly post it as a code reference.
+
+The main workflow is as follows:
+- The server and the client initialize `ECDiffieHellmanCng` using `SHA256` as the hashing algorithm.
+- The server and the client have a `static AES key` they know (provided on the command line in this case).
+- They both encrypt their `ECDiffieHellmanCng public keys` with the static AES password and exchange them. This is not a connection security feature; it is used as an auth feature. Only a client that knows the AES key the server uses will be able to perform the key exchange.
+- Both the server and the client `DeriveKeyMaterial`. They now share a secret byte array. This array will be different every time the connection is established regardless of the initial exchange.
+- This secret is then used to construct a `new AES Key and IV` which is then used for ongoing communication.
+
+
+```
+C:\> PickmansModel.exe -p testPipe -a Hello123!
+
+[?] Connected to pipe on : testPipe
+[+] ECDiffieHellmanCng initialized..
+    |_ Hash Algorithm : SHA256
+    |_ Public Key :
+00000000   45 43 4B 35 42 00 00 00  00 C7 56 D8 8F E7 05 93   ECK5B····ÇVØ?ç·?
+00000010   06 03 86 7C D1 2C E0 6F  52 43 C2 D5 6D 25 58 93   ··?|Ñ,àoRCÂÕm%X?
+00000020   31 A1 14 2E E9 43 A5 19  32 F8 98 4E 6D C7 54 90   1¡·.éC¥·2ø?NmÇT?
+00000030   CE 81 4B CD 8C CF F8 0E  2C 45 FA 2E 55 95 40 3C   Î?KÍ?Ïø·,Eú.U?@<
+00000040   A1 BF F8 B7 8C 22 5B 61  F9 4A 01 9E 27 5D 7F 30   ¡¿ø·?"[aùJ·?']⌂0
+00000050   86 28 6C 0D E3 39 8A 62  14 8C 79 36 66 2A 2E 1C   ?(l·ã9?b·?y6f*.·
+00000060   32 AC 7A 3F E3 A5 F8 73  72 D6 F1 15 9F 0F 1C 7B   2¬z?ã¥øsrÖñ·?··{
+00000070   45 52 D3 39 C9 29 CC 01  8A 83 DD 15 B6 DA 4C C6   ERÓ9É)Ì·??Ý·¶ÚLÆ
+00000080   90 26 D5 42 82 D1 B3 17  31 CA 11 C4               ?&ÕB?Ñ³·1Ê·Ä
+
+[+] Received server ECDH public key
+    |_ AES Encrypted Public Key :
+00000000   15 BA 7B FC E8 D1 71 A3  7E C2 45 CD DC F0 D2 49   ·º{üèÑq£~ÂEÍÜðÒI
+00000010   ED 7B AC 1A E5 2D CD 99  54 2D F4 DB 95 EE CB 94   í{¬·å-Í?T-ôÛ?îË?
+00000020   8D 6C E9 5B AE 83 5A D5  F4 77 9C A1 14 75 15 60   ?lé[®?ZÕôw?¡·u·`
+00000030   7F C3 6A F7 1C 9B FD 79  BF 41 D0 91 5D D9 0F 72   ⌂Ãj÷·?ýy¿AÐ?]Ù·r
+00000040   95 37 6B 9A 9A 96 CA E6  B1 1E 5B 77 C8 AC 66 60   ?7k???Êæ±·[wÈ¬f`
+00000050   95 67 A9 47 2A F6 A1 26  17 CF 82 B3 C4 00 A9 38   ?g©G*ö¡&·Ï?³Ä·©8
+00000060   BD 8D 6E 1A 16 41 7B B2  7C 82 00 D8 75 8F F1 C7   ½?n··A{²|?·Øu?ñÇ
+00000070   4F 36 66 72 04 C9 8D 43  15 52 80 A4 63 77 E9 9E   O6fr·É?C·R?¤cwé?
+00000080   59 DA FE 4A 21 78 48 9E  09 C6 91 92 EB 4C FC C5   YÚþJ!xH?·Æ??ëLüÅ
+
+[>] Derived Shared Secret
+00000000   49 A1 37 6A EE 69 D7 94  A9 2B 58 BB 10 05 2D C4   I¡7jîi×?©+X»··-Ä
+00000010   94 05 84 6E FB 59 C6 9B  75 5E 12 2F 5D C1 A6 DA   ?·?nûYÆ?u^·/]Á¦Ú
+
+[>] Derived Shared IV
+00000000   60 AA 25 A9 62 F3 80 4E  94 66 E3 0F 40 0F 25 74   `ª%©bó?N?fã·@·%t
+
+[Client sending] : Well, if you must hear it, I don't know why you shouldn't. Maybe you ought to, anyhow, for you kept writing me like a grieved parent when you heard I'd begun to cut the Art Club and keep away from Pickman.
+
+[Server Received] : You know, there are things that won't do for Newbury Street-things that are out of place here, and that can't be conceived here, anyhow. It's my business to catch the overtones of the soul, and you won't find those in a parvenu set of artificial streets on made land. Back Bay isn't Boston-it isn't anything yet, because it's had no time to pick up memories and attract local spirits. If there are any ghosts here, they're the tame ghosts of a salt marsh and a shallow cove; and I want human ghosts-the ghosts of beings highly organised enough to have looked on hell and known the meaning of what they saw.
+
+[Client Sending] : Pickman had promised to shew me the place, and heaven knows he had done it. He led me out of that tangle of alleys in another direction, it seems, for when we sighted a lamp post we were in a half-familiar street with monotonous rows of mingled tenement blocks and old houses. Charter Street, it turned out to be, but I was too flustered to notice just where we hit it.
+```
+
 ## Windows API
 
 ### GetAPISetMapping
