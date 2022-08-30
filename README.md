@@ -631,6 +631,58 @@ C:\> PickmansModel.exe -p testPipe -a Hello123!
 [Client Sending] : Pickman had promised to shew me the place, and heaven knows he had done it. He led me out of that tangle of alleys in another direction, it seems, for when we sighted a lamp post we were in a half-familiar street with monotonous rows of mingled tenement blocks and old houses. Charter Street, it turned out to be, but I was too flustered to notice just where we hit it.
 ```
 
+### TOTP-Gen
+
+`totp-gen` is a small POC which demonstrates time-based one-time password (TOTP) generation in C#. This POC specifically gets `DateTime.UtcNow` and uses that as a `Key` value to initialize `HMACSHA256`. The `HMACSHA256` object is then used to hash a `String` based seed and generate a numeric TOTP value.
+
+This is mostly to be used as a reference for me so I can strip out the generator if needed and integrate it into other tools (e.g., an extra layer of auth for an encrypted comms channel). The only required functions are `generateTOTP` and `validateTOTP` in `hTOTP.cs`.
+
+Notes:
+- TOTP's are scoped to a full `UtcNow` minute.
+- It is of course possible to adjust the timespan during which a code is valid but generating a new one every minute seems reasonable.
+- It would be easy, and recommended, that a forgiveness mechanic is added to `generateTOTP` so it calculates the current and previous TOTP in case an authentication code is generated before the minute rolls over and is received during the next minute.
+
+
+```
+C:\>totp_gen.exe -s HelloWorld
+  _       _
+ | |_ ___| |_ _ __ ___ __ _ ___ ___
+ |  _/ _ \  _| '_ \___/ _` / -_)   \
+  \__\___/\__| .__/   \__, \___|_||_|
+             |_|      |___/
+
+[+] TOTP valid for 30 seconds
+[>] TOTP code --> 1447475300
+
+C:\>totp_gen.exe -s Jumanji
+  _       _
+ | |_ ___| |_ _ __ ___ __ _ ___ ___
+ |  _/ _ \  _| '_ \___/ _` / -_)   \
+  \__\___/\__| .__/   \__, \___|_||_|
+             |_|      |___/
+
+[+] TOTP valid for 23 seconds
+[>] TOTP code --> 587402414
+
+C:\>totp_gen.exe -s Jumanji -c 587402414
+  _       _
+ | |_ ___| |_ _ __ ___ __ _ ___ ___
+ |  _/ _ \  _| '_ \___/ _` / -_)   \
+  \__\___/\__| .__/   \__, \___|_||_|
+             |_|      |___/
+
+[+] TOTP code is valid
+
+C:\>totp_gen.exe -s Jumanji -c 999902414
+  _       _
+ | |_ ___| |_ _ __ ___ __ _ ___ ___
+ |  _/ _ \  _| '_ \___/ _` / -_)   \
+  \__\___/\__| .__/   \__, \___|_||_|
+             |_|      |___/
+
+[!] TOTP code is invalid
+```
+
 ## Windows API
 
 ### GetAPISetMapping
