@@ -797,3 +797,108 @@ VMware Virtual Ethernet Adapter for VMnet8
 
 [...Snipped...]
 ```
+
+### handle
+
+Just a small POC to dump handle information. There is nothing special here. The only thing to note is that, as a matter of course, `NtQuerySystemInformation -> SystemExtendedHandleInformation` doesn't tell you what `type` a handle is, it only provides you with a type index. This is annoying because these indexes tent to change from version to version. Traditionally the documented approach is to duplicate the handle and then resolve it's type but that isn't great for a lot of reasons. It is however possible to resolve all possible types using `NtQueryObject -> ObjectAllTypesInformation` (Win 8+). This poc shows that, it can dump `types` and do handle resolution for a pid where it automatically converts the `TypeIndex` to it's readable name.
+
+```
+C:\> handle.exe -t
+
+[+] Object Type --> Type
+    |_ TotalNumberOfObjects       : 69
+    |_ TotalNumberOfHandles       : 0
+    |_ TotalPagedPoolUsage        : 0
+    |_ TotalNonPagedPoolUsage     : 0
+    |_ TotalNamePoolUsage         : 0
+    |_ TotalHandleTableUsage      : 0
+    |_ HighWaterNumberOfObjects   : 69
+    |_ HighWaterNumberOfHandles   : 0
+    |_ HighWaterPagedPoolUsage    : 0
+    |_ HighWaterNonPagedPoolUsage : 0
+    |_ HighWaterNamePoolUsage     : 0
+    |_ HighWaterHandleTableUsage  : 0
+    |_ InvalidAttributes          : 0x100
+    |_ GenericMapping
+    |  |_ GenericRead             : 0x20000
+    |  |_ GenericWrite            : 0x20000
+    |  |_ GenericExecute          : 0x20000
+    |  |_ GenericAll              : 0xF0001
+    |_ ValidAccessMask            : 0x1F0001
+    |_ SecurityRequired           : 0
+    |_ MaintainHandleCount        : 0
+    |_ TypeIndex                  : 0x2
+    |_ ReservedByte               : 0
+    |_ PoolType                   : NonPagedPoolNx
+    |_ DefaultPagedPoolCharge     : 0
+    |_ DefaultNonPagedPoolCharge  : 304
+
+[+] Object Type --> Directory
+    |_ TotalNumberOfObjects       : 86
+    |_ TotalNumberOfHandles       : 612
+    |_ TotalPagedPoolUsage        : 0
+    |_ TotalNonPagedPoolUsage     : 0
+    |_ TotalNamePoolUsage         : 0
+    |_ TotalHandleTableUsage      : 0
+    |_ HighWaterNumberOfObjects   : 88
+    |_ HighWaterNumberOfHandles   : 622
+    |_ HighWaterPagedPoolUsage    : 0
+    |_ HighWaterNonPagedPoolUsage : 0
+    |_ HighWaterNamePoolUsage     : 0
+    |_ HighWaterHandleTableUsage  : 0
+    |_ InvalidAttributes          : 0x100
+    |_ GenericMapping
+    |  |_ GenericRead             : 0x20003
+    |  |_ GenericWrite            : 0x2000C
+    |  |_ GenericExecute          : 0x20003
+    |  |_ GenericAll              : 0xF000F
+    |_ ValidAccessMask            : 0xF000F
+    |_ SecurityRequired           : 1
+    |_ MaintainHandleCount        : 0
+    |_ TypeIndex                  : 0x3
+    |_ ReservedByte               : 0
+    |_ PoolType                   : PagedPool
+    |_ DefaultPagedPoolCharge     : 88
+    |_ DefaultNonPagedPoolCharge  : 344
+
+[..Snip..]
+
+C:\> handle.exe -p 2988
+
+[+] Handle --> 0x4
+    |_ Object Type           : Event
+    |_ GrantedAccess         : 0x1F0003
+    |_ Object                : 0xFFFFD20ACDB611E0
+
+[+] Handle --> 0x8
+    |_ Object Type           : Event
+    |_ GrantedAccess         : 0x1F0003
+    |_ Object                : 0xFFFFD20ACDB61260
+
+[+] Handle --> 0x12
+    |_ Object Type           : Event
+    |_ GrantedAccess         : 0x1F0003
+    |_ Object                : 0xFFFFD20ACDB61FE0
+
+[+] Handle --> 0x16
+    |_ Object Type           : WaitCompletionPacket
+    |_ GrantedAccess         : 0x1
+    |_ Object                : 0xFFFFD20AC514F6D0
+
+[+] Handle --> 0x20
+    |_ Object Type           : IoCompletion
+    |_ GrantedAccess         : 0x1F0003
+    |_ Object                : 0xFFFFD20ABED22BC0
+
+[+] Handle --> 0x24
+    |_ Object Type           : TpWorkerFactory
+    |_ GrantedAccess         : 0xF00FF
+    |_ Object                : 0xFFFFD20AB71D9CF0
+
+[+] Handle --> 0x28
+    |_ Object Type           : IRTimer
+    |_ GrantedAccess         : 0x100002
+    |_ Object                : 0xFFFFD20ACDB25D60
+
+[..Snip..]
+```
