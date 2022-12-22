@@ -800,7 +800,7 @@ VMware Virtual Ethernet Adapter for VMnet8
 
 ### handle
 
-Just a small POC to dump handle information. There is nothing special here. The only thing to note is that, as a matter of course, `NtQuerySystemInformation -> SystemExtendedHandleInformation` doesn't tell you what `type` a handle is, it only provides you with a type index. This is annoying because these indexes tent to change from version to version. Traditionally the documented approach is to duplicate the handle and then resolve it's type but that isn't great for a lot of reasons. It is however possible to resolve all possible types using `NtQueryObject -> ObjectAllTypesInformation` (Win 8+). This poc shows that, it can dump `types` and do handle resolution for a pid where it automatically converts the `TypeIndex` to it's readable name.
+Just a small POC to dump handle information. There is nothing special here. The only thing to note is that, as a matter of course, `NtQuerySystemInformation -> SystemExtendedHandleInformation` doesn't tell you what `type` a handle is, it only provides you with a type index. This is annoying because these indexes tend to change from version to version. Traditionally the documented approach is to duplicate the handle and then resolve it's type but that isn't great for a lot of reasons. It is however possible to resolve all possible types using `NtQueryObject -> ObjectAllTypesInformation` (Win 8+). This poc shows that, it can dump `types` and do handle resolution for a pid where it automatically converts the `TypeIndex` to it's readable name.
 
 ```
 C:\> handle.exe -t
